@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kitchen Ninja</title>
+  <meta name="description" content="Meal service for the masses!">
+  <!-- le javascript + css -->
+  <!-- maybe jquery? -->
+  <!-- bootstrap/ratchet js? -->
+  <!-- bootstrap/ratchet css? -->
+  <link rel="icon" type="image/png" href="../assets/ico/favicon.png">
+  <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  <!-- our own stylesheet? -->
+
+  <!-- Google Analytics Code -->
+
+  <!-- End Google Analytics -->
+</head>
+<body>
+
+  <!-- Nav bar/header goes here! -->
+  
+    <%if @error then %>
+      <div class="alert alert-error"><%=@error%></div>
+    <% end %>
+    <%= yield %>
+
+  <!-- Footer goes here! -->
+</body>
