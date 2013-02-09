@@ -2,17 +2,19 @@ require 'rubygems'
 require 'bundler/setup' #Clears all gems from the load path EXCEPT those in the Gemfile
 require 'sinatra'
 require 'rack-flash'
+require 'net/http'
+require 'net/https'
+require 'uri'
 
 # helper methods
 require_relative './helpers.rb'
 
 configure do
-  #https://api.electricimp.com/v1/15c991e47cd2d556/305b47ad02f145bf
-  set :led_state, 
+  current_led_status
+  set :led_state, -1
 end
 
 get '/' do
-  #erb 'Hello!'
   erb :home
 end
 
@@ -29,12 +31,3 @@ post '/led-state' do
   logger.info "DONE WITH POST"
 end
 
-# view helpers
-
-def is_led_on
-	html = ''
-	if session[:led_state] == 1
-		html << 'active'
-	end
-	html
-end
