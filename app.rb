@@ -24,6 +24,7 @@ end
 
 post '/led-state' do
   logger.info "Setting led_state..."
+  settings.led_state = params[:value]
   logger.info "POST to /led-state HAS BEEN RECOREDED"
   logger.info "value: " + params[:value].to_s
   logger.info "target: " + params[:target].to_s
