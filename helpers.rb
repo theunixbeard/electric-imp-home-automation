@@ -1,11 +1,15 @@
 # view helpers
 
-def is_led_on
+def toggle_active_html
   html = ''
-  if settings.led_state == 1
+  if get_led_state == 1
     html << 'active'
   end
   html
+end
+
+def get_led_state
+  settings.led_state
 end
 
 # other helpers

@@ -2,13 +2,12 @@
 
  <div class="content-padded">
   <p class="welcome">In this Proof-Of-Concept, we can control a LED on our board via the internet (and this app)! Simply hit the toggle switch to alternate between the LED flashing and being turned off.</p>
-  <p id="changeMe">LED is: ON</p>
  </div>
 
  <ul class="list inset">
   <li>
-    <strong>Toggle LED Flashing</strong>
-    <div class="toggle <%= is_led_on %>" id="toggleLED">
+    <strong>Toggle LED On/Off</strong>
+    <div class="toggle <%= toggle_active_html %>" id="toggleLED">
       <div class="toggle-handle"></div>
     </div>
   </li>
@@ -23,19 +22,19 @@
 <script type="text/javascript">
 function toggleLED() {
   if(state == 0){
-    $("#changeMe").replaceWith('<p id="changeMe">zzzzzzzzzzzzzzzz</p>');
     state = 1;
     $.post(
       "https://api.electricimp.com/v1/15c991e47cd2d556/305b47ad02f145bf", 
       { value: 1, channel: 1 } 
     );
+    $('#toggleLED').removeClass().addClass('toggle active');
   }else{
-    $("#changeMe").replaceWith('<p id="changeMe">yyyyyyyyyyyyyyyy</p>');
     state = 0;
     $.post(
       "https://api.electricimp.com/v1/15c991e47cd2d556/305b47ad02f145bf", 
       { value: 0, channel: 1 } 
     );
+    $('#toggleLED').removeClass().addClass('toggle');
   }
 
 }
@@ -44,5 +43,5 @@ document
   .querySelector('#toggleLED')
   .addEventListener('toggle', toggleLED);
 });
-var state = 0;
+var state = <%= get_led_state %>;
 </script>
