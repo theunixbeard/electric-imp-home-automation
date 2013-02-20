@@ -2,6 +2,9 @@ require 'rubygems'
 require 'bundler/setup' #Clears all gems from the load path EXCEPT those in the Gemfile
 require 'sinatra'
 require 'rack-flash'
+require 'data_mapper'
+require_relative './config/database'
+require 'warden'
 require 'net/http'
 require 'net/https'
 require 'uri'
@@ -25,7 +28,7 @@ end
 post '/led-state' do
   logger.info "Setting led_state..."
   settings.led_state = params[:value].to_i
-  logger.info "POST to /led-state HAS BEEN RECOREDED"
+  logger.info "POST to /led-state HAS BEEN RECORDED"
   logger.info "value: " + params[:value].to_s
   logger.info "target: " + params[:target].to_s
   logger.info "channel: " + params[:channel].to_s
