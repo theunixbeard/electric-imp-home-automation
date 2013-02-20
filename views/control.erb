@@ -1,16 +1,12 @@
 
-  <% @title = "TEST TITLE" %>
+  <% @webpage_title = 'Control' %>
+  <% @app_title = 'Control' %>
  <div class="content-padded">
-  <p class="welcome">In this Proof-Of-Concept, we can control a LED on our board via the internet (and this app)! Simply hit the toggle switch to alternate between the LED flashing and being turned off.</p>
+  <p class="welcome">Hit the On/Off toggles below to activate and deactivate power to your outlets.</p>
  </div>
 
  <ul class="list inset">
-  <li>
-    <strong>Toggle LED On/Off</strong>
-    <div class="toggle <%= toggle_active_html %>" id="toggleLED">
-      <div class="toggle-handle"></div>
-    </div>
-  </li>
+  <%= outlet_toggle_list %>
   <li>
     <a href="#" onclick="toggleLED()">
       <strong>Web Test Button</strong>

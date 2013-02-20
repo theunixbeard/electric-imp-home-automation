@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title><%= @title %></title>
+    <title><%= @webpage_title %></title>
 
     <!-- Sets initial viewport load and disables zooming  -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -12,15 +12,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <!-- Set Apple icons for when prototype is saved to home screen -->
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/touch-icons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/touch-icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="assets/touch-icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/touch-icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/touch-icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/assets/touch-icons/apple-touch-icon-57x57.png">
 
     <!-- Include the compiled Ratchet CSS -->
-    <link rel="stylesheet" href="css/ratchet.css">
+    <link rel="stylesheet" href="/css/ratchet.css">
 
     <!-- Include the compiled Ratchet JS -->
-    <script src="js/ratchet.js"></script>
+    <script src="/js/ratchet.js"></script>
 
     <!-- My CSS -->
     <style type="text/css">
@@ -38,8 +38,25 @@
 
   <!-- Make sure all your bars are the first things in your <body> -->
   <header class="bar-title">
-    <h1 class="title">Team 1 FTW!</h1>
+    <h1 class="title"><%= @app_title %></h1>
   </header>
+
+  <nav class="bar-tab">
+    <ul class="tab-inner">
+      <li class="tab-item <%= tab_is_active(@app_title, "Control") %>">
+        <a href="/control">
+          <img class="tab-icon" src="/assets/img/icon-home.png">
+          <div class="tab-label">Control</div>
+        </a>
+      </li>
+      <li class="tab-item <%= tab_is_active(@app_title, "Setup") %>">
+        <a href="/setup">
+          <img class="tab-icon" src="/assets/img/icon-settings.png">
+          <div class="tab-label">Settings</div>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
   <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
   <div class="content">

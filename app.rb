@@ -15,10 +15,32 @@ require_relative './helpers.rb'
 configure do
   current_led_status
   set :led_state, -1
+  set :user_id, 1
+end
+
+def control_route
+  @outlets = Outlet.all(:user_id => settings.user_id)
+  #control assumes outlets instance variable w/ all current user's outlets
+  erb :control
 end
 
 get '/' do
-  erb :home
+  control_route
+end
+
+get '/control' do
+  control_route
+end
+
+get '/setup' do
+  @outlets = Outlet.all(:user_id => settings.user_id)
+  #setup assumes outlets instance variable w/ all current user's outlets
+  erb :setup
+end
+
+get '/outlet/:id' do
+  # Ensure user has access rights to this outlet!!!
+  erb :outlet_settings
 end
 
 get '/led-state' do

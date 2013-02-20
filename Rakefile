@@ -13,7 +13,7 @@ task :seed_db do
   (0..3).each do |n|
     @outlets[n] = Outlet.create(
       :user_outlet_number => n,
-      :state              => true,
+      :state              => (n%2 == 0),
       :override_active    => false,
       :user               => @user
     )
