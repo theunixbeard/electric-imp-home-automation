@@ -43,6 +43,39 @@ get '/outlet/:id' do
   erb :outlet_settings
 end
 
+get '/outlet/:id/rename' do
+  # Ensure user has access rights to this outlet!!!
+  erb :outlet_rename
+end
+
+post '/outlet/:id/rename' do
+  # Ensure user has access rights to this outlet!!!
+  outlet = Outlet.get!(params[:id])
+  if params[:name] && params[:name] != ''
+    outlet.update(:user_outlet_name => params[:name])
+  end
+end
+
+get '/outlet/:id/schedule' do
+  # Ensure user has access rights to this outlet!!!
+  erb :outlet_schedule
+end
+
+
+post '/outlet/:id/schedule-toggle' do
+  # Ensure user has access rights to this outlet!!!
+  outlet = Outlet.get!(params[:id])
+  if params[:value] == "0"
+    # disable schedule, override active is true
+    outlet.update(:override_active => true)
+  elsif params[:value] == "1"
+    # enable schedule, override active is false
+   outlet.update(:override_active => false)
+  else
+    logger.info "Post to /outlet/:id/schedule-toggle with BAD value of " + params[:value]
+  end
+end
+
 get '/led-state' do
   'GET to led-state'
 end

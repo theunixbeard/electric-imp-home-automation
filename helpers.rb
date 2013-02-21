@@ -21,6 +21,16 @@ def tab_is_active(actual_app_title, tab_title)
   end
 end
 
+def back_button back_button_url
+  html = ''
+  if back_button_url != ''
+    html << '<a class="button-prev" href="' + back_button_url + '">'
+    html << 'Back'
+    html << '</a>'
+  end
+  html
+end
+
 # control.erb helpers
 
 def outlet_number_human outlet
@@ -88,6 +98,61 @@ def outlet_settings_list
   html
 end
 
+# outlet_settings.erb helpers
+
+def toggle_schedule
+=begin
+<a class="button-positive button-block">Block button</a>
+=end
+  html = ''
+  outlet = Outlet.get!(params[:id])
+  if Schedule.count(:outlet_id => params[:id]) > 0
+    if(outlet.override_active)
+      html << '<a class="button-positive button-block" id="schedule_change_button">Enable Schedule</a>'
+    else
+      html << '<a class="button-negative button-block" id="schedule_change_button">Disable Schedule</a>'
+    end
+  end
+end
+
+# outlet_schedule.erb helpers
+
+def human_readable_time integer_time
+  hour = integer_time / 4
+  minute = (integer_time % 4) * 15
+  modifier = 'am'
+  if hour == 0
+    hour = 12
+  elsif hour > 12
+    hour = hour % 12
+    modifier = 'pm'
+  end
+  if minute == 0
+    minute = '00'
+  end
+  hour.to_s + ':' + minute.to_s + ' ' + modifier
+end
+
+def display_schedule wday
+=begin
+  <li>List item 1 <a class="button-negative">Remove</a></li>
+=end
+  html = ''
+  schedules = Schedule.all(:outlet_id => params[:id], :day => wday)
+  schedules.each do |schedule|
+    html << '<li>'
+    html << human_readable_time(schedule.time)
+    html << " "
+    if schedule.state
+      html << "ON"
+    else
+      html << "OFF"
+    end
+    html << '<a id="schedule' + schedule.id.to_s + '" class="button-negative">Remove</a>'
+    html << '</li>'
+  end
+  html
+end
 
 # other helpers
 

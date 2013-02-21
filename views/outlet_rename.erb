@@ -1,0 +1,32 @@
+  <% @webpage_title = 'Rename Outlet ' + params[:id] %>
+  <% @app_title = 'Rename Outlet ' + params[:id] %>
+  <% @back_button_url = '/outlet/' + params[:id] %>
+ <div class="content-padded">
+  <p class="welcome">On this screen you can rename your outlets to a more user friendly value.</p>
+  <p class="welcome">Current Name: <strong id="currentName"><%= outlet_name(Outlet.get!(params[:id])) %></strong></p>
+ </div>
+<form action="/outlet/<%= params[:id] %>/rename" method="post">
+  <div class="input-group">
+    <div class="input-row">
+      <label>New name</label>
+      <input id="newName" type="text" name="newName" placeholder="Kitchen Lamp, Toaster...">
+    </div>
+  </div>
+  <a id="rename_button" class="button-main button-block">Rename Outlet <%= params[:id] %></a>
+</form>
+
+<script type="text/javascript">
+function renameOutlet() {
+    $.post(
+      '/outlet/<%= params[:id] %>/rename', 
+      { name : $("#newName").val() } 
+    );
+    $("#currentName").text($("#newName").val());
+}
+$(window).load(function(){
+document
+  .querySelector('#rename_button')
+  .addEventListener('click', renameOutlet);
+});
+</script>
+

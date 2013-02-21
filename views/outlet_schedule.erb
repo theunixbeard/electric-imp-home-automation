@@ -1,0 +1,22 @@
+  <% @webpage_title = 'Outlet ' + params[:id] + ' Schedule' %>
+  <% @app_title = 'Outlet ' + params[:id] + ' Schedule' %>
+  <% @back_button_url = '/outlet/' + params[:id] %>
+<div class="content-padded">
+  <p class="welcome">Here you can set the weekly schedule for your outlet.</p>
+</div>
+<ul class="list">
+  <li class="list-divider">Sunday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(0) %>
+  <li class="list-divider">Monday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(1) %>
+  <li class="list-divider">Tuesday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(2) %>
+  <li class="list-divider">Wednesday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(3) %>
+  <li class="list-divider">Thursday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(4) %>
+  <li class="list-divider">Friday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(5) %>
+  <li class="list-divider">Saturday<a class="button-main">Add Times</a></li>
+  <%= display_schedule(6) %>
+</ul>

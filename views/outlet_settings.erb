@@ -1,6 +1,48 @@
   <% @webpage_title = 'Outlet ' + params[:id] + ' Settings' %>
   <% @app_title = 'Outlet ' + params[:id] + ' Settings' %>
+  <% @back_button_url = '/setup' %>
  <div class="content-padded">
-  <p class="welcome">To Do: Add back button, Rename link, set schedule link, enable/disable schedule link</p>
- </div>
+  <p class="welcome">Here you can rename your outlet, and set a weekly schedule for it.</p>
+  <ul class="list">
+    <li>
+      <a href="/outlet/<%= params[:id] %>/rename">
+        <strong>Rename Outlet</strong>
+        <span class="chevron"></span>
+      </a>
+    </li>
+    <li>
+      <a href="/outlet/<%= params[:id] %>/schedule">
+        <strong>Set Schedule</strong>
+        <span class="chevron"></span>
+      </a>
+    </li>
+  </ul>
+  <%= toggle_schedule %>
+</div>
+<script type="text/javascript">
+function scheduleChange() {
+  //'<a class="button-positive button-block" id="schedule_change_button">Enable Schedule</a>'
+  //'<a class="button-negative button-block" id="schedule_change_button">Disable Schedule</a>'
+  if($('#schedule_change_button').hasClass('button-positive')){
+    $('#schedule_change_button').removeClass('button-positive').addClass('button-negative');
+    $('#schedule_change_button').text('Disable Schedule');
+    $.post(
+      '/outlet/<%= params[:id] %>/schedule-toggle', 
+      { value: 1 } 
+    );
+  }else if($('#schedule_change_button').hasClass('button-negative')){
+    $('#schedule_change_button').removeClass('button-negative').addClass('button-positive');
+    $('#schedule_change_button').text('Enable Schedule');
+    $.post(
+      '/outlet/<%= params[:id] %>/schedule-toggle', 
+      { value: 0 } 
+    );
+  }
+}
+$(window).load(function(){
+document
+  .querySelector('#schedule_change_button')
+  .addEventListener('click', scheduleChange);
+});
+</script>
 
