@@ -24,9 +24,9 @@ function renameOutlet() {
     $("#currentName").text($("#newName").val());
 }
 $(window).load(function(){
-document
-  .querySelector('#rename_button')
-  .addEventListener('click', renameOutlet);
+  var button = document.querySelector('#rename_button');
+  button.addEventListener('click', renameOutlet);
+  button.addEventListener('touchstart', renameOutlet);
 });
 </script>
 

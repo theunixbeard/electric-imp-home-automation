@@ -40,9 +40,9 @@ function scheduleChange() {
   }
 }
 $(window).load(function(){
-document
-  .querySelector('#schedule_change_button')
-  .addEventListener('click', scheduleChange);
+  var button = document.querySelector('#schedule_change_button');
+  button.addEventListener('click', scheduleChange);
+  button.addEventListener('touchstart', scheduleChange);
 });
 </script>
 
