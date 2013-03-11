@@ -5,7 +5,7 @@
   <p class="welcome">On this screen you can rename your outlets to a more user friendly value.</p>
   <p class="welcome">Current Name: <strong id="currentName"><%= outlet_name(Outlet.get!(params[:id])) %></strong></p>
  </div>
-<form action="/outlet/<%= params[:id] %>/rename" method="post">
+<form action="/outlets/<%= params[:id] %>/rename" method="post">
   <div class="input-group">
     <div class="input-row">
       <label>New name</label>
@@ -18,7 +18,7 @@
 <script type="text/javascript">
 function renameOutlet() {
     $.post(
-      '/outlet/<%= params[:id] %>/rename', 
+      '/outlets/<%= params[:id] %>/rename', 
       { name : $("#newName").val() } 
     );
     $("#currentName").text($("#newName").val());

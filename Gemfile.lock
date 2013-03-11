@@ -87,6 +87,7 @@ DEPENDENCIES
   bcrypt-ruby
   data_mapper
   dm-sqlite-adapter
+  json
   rack-flash3
   rake
   sinatra
