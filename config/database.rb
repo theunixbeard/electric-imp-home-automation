@@ -13,7 +13,7 @@ require_relative '../models/Schedule'
 
 #Finalize Models, update if needed
 DataMapper.finalize
-#DataMapper.auto_migrate!
-DataMapper.auto_upgrade!
+#DataMapper.auto_migrate! # wipes existing data
+DataMapper.auto_upgrade!  # doesnt wipe existing data
 
 DataMapper::Model.raise_on_save_failure = true

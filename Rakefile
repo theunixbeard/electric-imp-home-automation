@@ -5,17 +5,20 @@ task :seed_db do
   require_relative './config/database'
   DataMapper.auto_migrate!
   @user = User.create(
-    :email          => "ee459group1@gmail.com",
-    :password_hash  => "123",
-    :salt           => "456"
+    :email          => 'ee459group1@gmail.com',
+    :password_hash  => '123',
+    :salt           => '456',
+    :imp_url        => 'https://api.electricimp.com/v1/15c991e47cd2d556/30106fa2633694d6'
   )
   @outlets = Array.new
   (0..3).each do |n|
     @outlets[n] = Outlet.create(
-      :user_outlet_number => n,
-      :state              => (n%2 == 0),
-      :override_active    => false,
-      :user               => @user
+      :user_outlet_number   => n,
+      :state                => (n%2 == 0),
+      :override_active      => false,
+      :user                 => @user,
+      :board_product_key    => '1234567890',
+      :board_outlet_number  => n
     )
   end
   # 15 min intervals, so times range from 0-95 (24*4)

@@ -14,7 +14,7 @@ require 'json'
 require_relative './helpers.rb'
 
 configure do
-  current_led_status
+  # current_led_status # For original proof-of-concept to get LED state pre-DB when backend restarts
   set :led_state, -1
   set :user_id, 1
 end
@@ -85,6 +85,28 @@ post '/outlets/:outlet_id/power-toggle' do
     value_num = params[:value].to_i
     logger.info 'Changed outlet #' + outlet_id_num.to_s +
                 ' to value: ' + value_num.to_s
+    imp_url = User.get(settings.user_id).imp_url
+    outlet = Outlet.get(outlet_id_num)
+    # Begin HTTP Post Boilerplate
+    uri = URI.parse imp_url.to_s #convert addressable/uri to stdlib URI
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.request_uri)
+    value_json_hash = {
+      :board_product_key    => outlet.board_product_key.to_s,
+      :board_outlet_number  => outlet.board_outlet_number.to_s,
+      :state                => value_num.to_s,
+      :outlet_id            => outlet_id_num.to_s 
+    }
+    logger.info value_json_hash.to_json
+    request.set_form_data(
+      {
+        'value' => value_json_hash.to_json, 
+        'channel' => '1'
+      })
+    response = http.request(request)
+    logger.info response.to_s
+    #end HTTP Post Boilerplate
     return 'good power-toggle'
   rescue Exception => e
     logger.error e.message

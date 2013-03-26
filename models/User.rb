@@ -15,8 +15,9 @@ class User
                               :index => true
   property :password_hash,    String, :required => true, :length => 70
   property :salt,             String, :required => true
+  property :imp_url,          URI
   property :created_at,       DateTime, :default => DateTime.now
-
+  
   has n, :outlets
  
   validates_presence_of :email, :password_hash, :salt
