@@ -123,7 +123,7 @@ post '/outlets/init' do
   begin
     outlets = Outlet.all(:user_id => settings.user_id) 
     outlets.each do |outlet|
-      set_outlet_state outlet.id, outlet.state.to_i
+      set_outlet_state outlet.id, (outlet.state ? 1 : 0)
     end
     return "good outlet init"
   rescue Exception => e
@@ -135,12 +135,13 @@ end
 
 post '/outlets/set-state' do
   begin
-    response_json = params[:value].to_json
-    outlet_id_num = response_json[:outlet_id].to_i
-    value_num = response_json[:value].to_i
+    response_json = JSON.parse(params[:value])
+    outlet_id_num = response_json['outlet_id'].to_i
+    state_num = response_json['state'].to_i
     logger.info 'Changed outlet #' + outlet_id_num.to_s +
-                ' to value: ' + value_num.to_s
+                ' to state: ' + state_num.to_s
     # ACTUALLY COMMIT VALUE IN DB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    Outlet.get(outlet_id_num).update(:state => (state_num == 1 ? true : false))
   rescue Exception => e
     logger.error e.message
     logger.error e.backtrace.inspect
