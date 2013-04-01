@@ -79,40 +79,72 @@ post '/outlets/:outlet_id/schedules/:schedule_id/delete' do
   return 'bad schedule delete'
 end
 
+def set_outlet_state outlet_id_num, value_num
+  logger.info 'Changed outlet #' + outlet_id_num.to_s +
+              ' to value: ' + value_num.to_s
+  imp_url = User.get(settings.user_id).imp_url
+  outlet = Outlet.get(outlet_id_num)
+  # Begin HTTP Post Boilerplate
+  uri = URI.parse imp_url.to_s #convert addressable/uri to stdlib URI
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Post.new(uri.request_uri)
+  value_json_hash = {
+    :board_product_key    => outlet.board_product_key.to_s,
+    :board_outlet_number  => outlet.board_outlet_number.to_s,
+    :state                => value_num.to_s,
+    :outlet_id            => outlet_id_num.to_s 
+  }
+  logger.info value_json_hash.to_json
+  request.set_form_data(
+    {
+      'value' => value_json_hash.to_json, 
+      'channel' => '1'
+    })
+  response = http.request(request)
+  logger.info response.to_s
+  #end HTTP Post Boilerplate
+end
+
 post '/outlets/:outlet_id/power-toggle' do
   begin
     outlet_id_num = params[:outlet_id].to_i
     value_num = params[:value].to_i
-    logger.info 'Changed outlet #' + outlet_id_num.to_s +
-                ' to value: ' + value_num.to_s
-    imp_url = User.get(settings.user_id).imp_url
-    outlet = Outlet.get(outlet_id_num)
-    # Begin HTTP Post Boilerplate
-    uri = URI.parse imp_url.to_s #convert addressable/uri to stdlib URI
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.request_uri)
-    value_json_hash = {
-      :board_product_key    => outlet.board_product_key.to_s,
-      :board_outlet_number  => outlet.board_outlet_number.to_s,
-      :state                => value_num.to_s,
-      :outlet_id            => outlet_id_num.to_s 
-    }
-    logger.info value_json_hash.to_json
-    request.set_form_data(
-      {
-        'value' => value_json_hash.to_json, 
-        'channel' => '1'
-      })
-    response = http.request(request)
-    logger.info response.to_s
-    #end HTTP Post Boilerplate
+    set_outlet_state outlet_id_num, value_num
     return 'good power-toggle'
   rescue Exception => e
     logger.error e.message
     logger.error e.backtrace.inspect
   end
   return 'bad outlet power-toggle'
+end
+
+post '/outlets/init' do
+  begin
+    outlets = Outlet.all(:user_id => settings.user_id) 
+    outlets.each do |outlet|
+      set_outlet_state outlet.id, outlet.state.to_i
+    end
+    return "good outlet init"
+  rescue Exception => e
+    logger.error e.message
+    logger.error e.backtrace.inspect
+  end
+  return "problem with outlet init"
+end
+
+post '/outlets/set-state' do
+  begin
+    response_json = params[:value].to_json
+    outlet_id_num = response_json[:outlet_id].to_i
+    value_num = response_json[:value].to_i
+    logger.info 'Changed outlet #' + outlet_id_num.to_s +
+                ' to value: ' + value_num.to_s
+    # ACTUALLY COMMIT VALUE IN DB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  rescue Exception => e
+    logger.error e.message
+    logger.error e.backtrace.inspect
+  end
 end
 
 ################ End iPhone Routes ####################
