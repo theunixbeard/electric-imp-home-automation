@@ -23,7 +23,7 @@ task :seed_db do
   end
   # 15 min intervals, so times range from 0-95 (24*4)
   @schedules = Array.new
-  (0..11).each do |n|
+  (0..15).each do |n|
     if n < 4
       @schedules[n] = Schedule.create(
         :state  => ((n % 2) == 0),
@@ -40,12 +40,20 @@ task :seed_db do
         :outlet => @outlets[0],
         :user   => @user
       )
-    else
+    elsif n < 12
       @schedules[n] = Schedule.create(
         :state  => ((n % 2) == 0),
         :time   => n*4 + 11 % 96,
         :day    => n%7,
         :outlet => @outlets[1],
+        :user   => @user
+      )
+    else
+      @schedules[n] = Schedule.create(
+        :state  => ((n % 2) == 0),
+        :time   => n%4 +6,
+        :day    => 4,
+        :outlet => @outlets[2],
         :user   => @user
       )
     end
@@ -54,6 +62,7 @@ end
 
 task :schedule_execute do
   require_relative './config/database'
+  require_relative './helpers.rb'
   # Check if any Outlets need to change at this time
   current_time = Time.new
   # puts current_time
@@ -66,6 +75,8 @@ task :schedule_execute do
     f.write "wday: " + current_time.wday.to_s + "\n"
     f.write "----------------------------------------------------------\n"
     schedules.each do |s|
+      # Make function call
+      set_outlet_state s.outlet_id, s.state ? 1 : 0
       f.write(s.id.to_s + "\t " + 
               s.state.to_s + "\t " + 
               s.time.to_s + "\t " + 
