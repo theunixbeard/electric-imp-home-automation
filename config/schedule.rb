@@ -18,7 +18,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-set :output, '/home/primaryubuntu/programming/sinatra/electric-imp-home-automation/whenever.log'
+set :output, '/home/ubuntu/programming/electric-imp-home-automation/whenever.log'
 
 every '0,15,30,45 * * * *' do
   rake "schedule_execute"
