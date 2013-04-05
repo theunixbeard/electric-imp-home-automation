@@ -167,7 +167,7 @@ def current_led_status
 end
 
 def set_outlet_state outlet_id_num, value_num
-  logger.info 'Changed outlet #' + outlet_id_num.to_s +
+  puts 'Changed outlet #' + outlet_id_num.to_s +
               ' to value: ' + value_num.to_s
   imp_url = User.get(settings.user_id).imp_url
   outlet = Outlet.get(outlet_id_num)
@@ -182,13 +182,13 @@ def set_outlet_state outlet_id_num, value_num
     :state                => value_num.to_s,
     :outlet_id            => outlet_id_num.to_s
   }
-  logger.info value_json_hash.to_json
+  puts value_json_hash.to_json
   request.set_form_data(
     {
       'value' => value_json_hash.to_json,
       'channel' => '1'
     })
   response = http.request(request)
-  logger.info response.to_s
+  puts response.to_s
   #end HTTP Post Boilerplate
 end
