@@ -75,7 +75,7 @@ task :seed_db do
     else
       @schedules[n] = Schedule.create(
         :state  => ((n % 2) == 0),
-        :time   => n%4 +6,
+        :time   => n%4 + 86,
         :day    => 4,
         :outlet => @outlets[2],
         :user   => @user
@@ -85,6 +85,10 @@ task :seed_db do
 end
 
 task :schedule_execute do
+  require 'net/http'
+  require 'net/https'
+  require 'uri'
+  require 'json'
   require_relative './config/database'
   require_relative './helpers.rb'
   # Check if any Outlets need to change at this time
@@ -93,9 +97,9 @@ task :schedule_execute do
   # puts current_time.wday # sunday == 0, monday == 1 etc.
   quarter_hour_section = (current_time.hour * 4) + (current_time.min / 15)
   schedules = Schedule.all(:time => quarter_hour_section, :day => current_time.wday)
-  File.open("/Users/primary/programming/electric-imp-home-automation/schedule_log.txt", "a") do |f|
+  #File.open("/Users/primary/programming/electric-imp-home-automation/schedule_log.txt", "a") do |f|
   #File.open("/home/primaryubuntu/programming/sinatra/electric-imp-home-automation/schedule_log.txt", "a") do |f|
-  #File.open("/home/ubuntu/programming/electric-imp-home-automation/schedule_log.txt", "a") do |f|
+  File.open("/home/ubuntu/programming/electric-imp-home-automation/schedule_log.txt", "a") do |f|
     f.write "Schedule task run at: " + current_time.to_s + "\n"
     f.write "quarter_hour_section: " + quarter_hour_section.to_s + "\n"
     f.write "wday: " + current_time.wday.to_s + "\n"

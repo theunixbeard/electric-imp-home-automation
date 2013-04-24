@@ -167,9 +167,10 @@ def current_led_status
 end
 
 def set_outlet_state outlet_id_num, value_num
+  user_id = defined?(settings) ? settings.user_id : 1 # Hack to make it work... 
   puts 'Changed outlet #' + outlet_id_num.to_s +
               ' to value: ' + value_num.to_s
-  imp_url = User.get(settings.user_id).imp_url
+  imp_url = User.get(user_id).imp_url
   outlet = Outlet.get(outlet_id_num)
   # Begin HTTP Post Boilerplate
   uri = URI.parse imp_url.to_s #convert addressable/uri to stdlib URI
