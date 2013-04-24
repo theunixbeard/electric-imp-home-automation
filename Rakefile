@@ -11,6 +11,7 @@ task :seed_db do
     :imp_url        => 'https://api.electricimp.com/v1/15c991e47cd2d556/30106fa2633694d6'
   )
   @outlets = Array.new
+  # Main board outlets
   (0..3).each do |n|
     @outlets[n] = Outlet.create(
       :user_outlet_number   => n,
@@ -21,6 +22,29 @@ task :seed_db do
       :board_outlet_number  => n
     )
   end
+  # Remote board #1 outlets
+  (4..7).each do |n|
+    @outlets[n] = Outlet.create(
+      :user_outlet_number   => n,
+      :state                => (n%2 == 0),
+      :override_active      => false,
+      :user                 => @user,
+      :board_product_key    => '1234511111',
+      :board_outlet_number  => (n - 4)
+    )
+  end
+  # Remote board #2 outlets
+  (8..11).each do |n|
+    @outlets[n] = Outlet.create(
+      :user_outlet_number   => n,
+      :state                => (n%2 == 0),
+      :override_active      => false,
+      :user                 => @user,
+      :board_product_key    => '1234522222',
+      :board_outlet_number  => (n - 8)
+    )
+  end
+
   # 15 min intervals, so times range from 0-95 (24*4)
   @schedules = Array.new
   (0..15).each do |n|
